@@ -4,9 +4,10 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Camera } from 'expo-camera';
 
-export default function TabOneScreen() {
+export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
     (async () => {
