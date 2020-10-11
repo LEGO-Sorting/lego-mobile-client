@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import { Text, View } from '../components/Themed';
 import { Camera } from 'expo-camera';
+import { Text, View } from '../../components/Themed';
+import PhoneCamera from './PhoneCamera';
 
 export default function CameraScreen() {
-  const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
 
 
   return (
     <View style={styles.container}>
-      <Camera style={{ flex: 1 }} type={type}>
+      <PhoneCamera>
         <View
           style={styles.cameraView}>
           <TouchableOpacity
@@ -43,7 +27,7 @@ export default function CameraScreen() {
             <Text style={styles.startRecording}> Start Recording </Text>
           </TouchableOpacity>
         </View>
-      </Camera>
+      </PhoneCamera>
     </View>
   );
 }
