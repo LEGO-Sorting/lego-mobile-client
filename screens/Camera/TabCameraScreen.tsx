@@ -7,6 +7,8 @@ import PhoneCamera from './PhoneCamera';
 export default function CameraScreen() {
   const [isRecording, setIsRecording] = useState(false);
 
+  const handleRecord
+
 
   return (
     <View style={styles.container}>
@@ -17,8 +19,13 @@ export default function CameraScreen() {
             style={styles.buttonsBar}
             onPress={() => setIsRecording(!isRecording)}>
             {!isRecording
-              ? <Text style={styles.startRecording}> Start Recording </Text>
-              : <Text style={styles.stopRecording}> Stop Recording </Text>
+              ? <View style={styles.startButtonBorder}>
+                  <View style={styles.startButtonInside} ></View>
+                </View>
+              : <View style={styles.stopButtonBorder}>
+                  <View style={styles.stopButtonInside} ></View>
+                </View>
+              
             }
           </TouchableOpacity>
         </View>
@@ -40,27 +47,42 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
-  startRecording: { 
+  startButtonBorder: { 
     marginBottom: 30,
-    padding: 12,
-    alignSelf: 'center',
-    textAlign:'center',
-    borderRadius:100,
-    borderWidth: 4,
+    borderWidth: 2,
+    borderRadius: 50,
     borderColor: 'white',
-    color: 'white',
-    fontSize: 18
+    height: 50,
+    width:50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'},
+  startButtonInside: {
+    borderWidth: 2,
+    borderRadius: 50,
+    borderColor: 'white',
+    height: 40,
+    width:40,
+    backgroundColor: 'white'
   },
-  stopRecording: { 
-    marginBottom: 30,
-    padding: 12,
-    alignSelf: 'center',
-    textAlign:'center',
-    borderRadius:100,
-    borderWidth: 4,
+  stopButtonInside: {
+    borderWidth: 2,
+    borderRadius:50,
     borderColor: 'red',
-    color: 'red',
-    fontSize: 18
+    height: 40,
+    width:40,
+    backgroundColor: 'red'
+  },
+  stopButtonBorder: { 
+    marginBottom: 30,
+    borderWidth: 2,
+    borderRadius: 50,
+    borderColor: 'red',
+    height: 50,
+    width:50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   buttonsBar: {
     flex: 1,
