@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import { Text, View } from '../../components/Themed';
 import PhoneCamera from './PhoneCamera';
 
 export default function CameraScreen() {
-  const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
 
 
@@ -16,15 +15,11 @@ export default function CameraScreen() {
           style={styles.cameraView}>
           <TouchableOpacity
             style={styles.buttonsBar}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            
-            <Text style={styles.startRecording}> Start Recording </Text>
+            onPress={() => setIsRecording(!isRecording)}>
+            {!isRecording
+              ? <Text style={styles.startRecording}> Start Recording </Text>
+              : <Text style={styles.stopRecording}> Stop Recording </Text>
+            }
           </TouchableOpacity>
         </View>
       </PhoneCamera>
@@ -54,6 +49,17 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: 'white',
     color: 'white',
+    fontSize: 18
+  },
+  stopRecording: { 
+    marginBottom: 30,
+    padding: 12,
+    alignSelf: 'center',
+    textAlign:'center',
+    borderRadius:100,
+    borderWidth: 4,
+    borderColor: 'red',
+    color: 'red',
     fontSize: 18
   },
   buttonsBar: {
