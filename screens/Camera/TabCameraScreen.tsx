@@ -1,23 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
+import * as Permissions from 'expo-permissions';
+
+import { useNavigation } from '@react-navigation/native';
 import { Text, View } from '../../components/Themed';
-import PhoneCamera from './PhoneCamera';
 
 export default function CameraScreen() {
+  const [hasPermission, setHasPermission] = useState(false);
+  const [focusedScreen, setFocusedScreen] = useState(true);
+  const navigation = useNavigation()
+
   const [isRecording, setIsRecording] = useState(false);
+  const [cameraRef, setCameraRef] = useState(null)
 
-  const handleRecord
+  const handleRecord = async() => {
+    if(!isRecording){
+      setIsRecording(true)
+      let video = await cameraRef.recordAsync();
+      console.log('video', video);
+    } else {
+      setIsRecording(false)
+      cameraRef.stopRecording()
+    }
+  }
 
+  useEffect(() =>{
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+
+      let cameraResponse = await Permissions.askAsync(Permissions.CAMERA)
+      if (cameraResponse.status == 'granted') {
+        let audioResponse = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+        if (audioResponse.status == 'granted') {
+          setHasPermission(true)
+      }
+    }
+    })();
+
+    navigation.addListener('focus', () =>
+      setFocusedScreen(true)
+    );
+    navigation.addListener('blur', () =>
+      setFocusedScreen(false)
+    );
+  })
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  if(!focusedScreen) {
+    return(
+      <View/>
+    )
+  }
 
   return (
     <View style={styles.container}>
-      <PhoneCamera>
+      <Camera
+        style={{flex: 1}}
+        ref={ref => setCameraRef(ref)}
+      >
         <View
           style={styles.cameraView}>
           <TouchableOpacity
             style={styles.buttonsBar}
-            onPress={() => setIsRecording(!isRecording)}>
+            onPress={async() => await handleRecord()}
+          >
             {!isRecording
               ? <View style={styles.startButtonBorder}>
                   <View style={styles.startButtonInside} ></View>
@@ -29,7 +83,7 @@ export default function CameraScreen() {
             }
           </TouchableOpacity>
         </View>
-      </PhoneCamera>
+      </Camera>
     </View>
   );
 }
