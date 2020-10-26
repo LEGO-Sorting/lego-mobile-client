@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
+import * as FileSystem from 'expo-file-system';
+import base64 from 'base64-js'
 
 import { useNavigation } from '@react-navigation/native';
 import { Text, View } from '../../components/Themed';
@@ -13,12 +15,53 @@ export default function CameraScreen() {
 
   const [isRecording, setIsRecording] = useState(false);
   const [cameraRef, setCameraRef] = useState(null)
+  const [base64Video, setBase64Video] = useState('')
+
+  const stringToUint8Array = (str: any) => {
+    const length = str.length
+    const array = new Uint8Array(new ArrayBuffer(length))
+    for (let i = 0; i < length; i++) array[i] = str.charCodeAt(i)
+    return array
+  }
+
+  // const fileToBase64 = async (uri: any) => {
+  //   const content = FileSystem.readAsStringAsync(uri.toString())
+  //   .then()
+  //   console.log(`Content`, content)
+  //   return base64.fromByteArray(stringToUint8Array(content))
+  // }
+
+  const fileToBase64 = async (uri: any) => {
+    let result = '';
+    try {
+        result = await FileSystem.readAsStringAsync(uri);
+        console.log('result', result)
+    } catch(e) {
+        console.log(e);
+    }
+    return base64.fromByteArray(stringToUint8Array(result));
+  }
+
+  const uploadVideo = (localUri: string) => {
+
+  }
+
 
   const handleRecord = async() => {
     if(!isRecording){
       setIsRecording(true)
       let video = await cameraRef.recordAsync();
       console.log('video', video);
+      const result = await FileSystem.uploadAsync(
+        'https://dfd2695d246e.ngrok.io/api/upload/files',
+        video.uri, {
+          uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+          fieldName: 'file',
+          mimeType: 'video/mp4'
+        })
+
+      console.log(result)
+
     } else {
       setIsRecording(false)
       cameraRef.stopRecording()
