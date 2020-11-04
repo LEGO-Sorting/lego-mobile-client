@@ -50,10 +50,13 @@ export default function CameraScreen() {
   const handleRecord = async() => {
     if(!isRecording){
       setIsRecording(true)
-      let video = await cameraRef.recordAsync();
+      let video = await cameraRef.recordAsync({
+        quality: Camera.Constants.VideoQuality['480p'],
+        mute: true
+      });
       console.log('video', video);
       const result = await FileSystem.uploadAsync(
-        'https://dfd2695d246e.ngrok.io/api/upload/files',
+        'https://94510c80f522.ngrok.io/api/upload/files',
         video.uri, {
           uploadType: FileSystem.FileSystemUploadType.MULTIPART,
           fieldName: 'file',
