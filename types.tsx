@@ -5,13 +5,13 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   Camera: undefined;
-  TabTwo: undefined;
+  Settings: undefined;
 };
 
 export type TabCameraParamList = {
   TabCameraScreen: undefined;
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type TabSettingsParamList = {
+  TabSettingsScreen: undefined;
 };

@@ -7,6 +7,7 @@ import base64 from 'base64-js'
 
 import { useNavigation } from '@react-navigation/native';
 import { Text, View } from '../../components/Themed';
+import Axios from 'axios';
 
 export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -56,12 +57,15 @@ export default function CameraScreen() {
       });
       console.log('video', video);
       const result = await FileSystem.uploadAsync(
-        'https://94510c80f522.ngrok.io/api/upload/files',
+        'https://8f51146e9d2c.ngrok.io/api/upload/files',
         video.uri, {
           uploadType: FileSystem.FileSystemUploadType.MULTIPART,
           fieldName: 'file',
           mimeType: 'video/mp4'
         })
+
+      console.log(result.body.imageId);
+      Axios.post('https://8f51146e9d2c.ngrok.io/api/process',{'imageName': result.body.imageId})
 
       console.log(result)
 
