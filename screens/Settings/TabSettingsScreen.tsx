@@ -1,23 +1,32 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import EditScreenInfo from '../../components/EditScreenInfo';
-import { View, Text, TextInput } from '../../components/Themed';
+import { View, Text, Button, TextInput } from '../../components/Themed';
+import { setApiUri } from '../../redux/Settings/Settings_actions';
 
 export default function TabSettingsScreen() {
   const [apiUri, setApiUri] = React.useState('https://1234565576.ngrok.io/api');
+  const dispatch = useDispatch();
   return (
     <View style={styles.container}>
-        <Text
-          style={styles.apiLabel}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)">
-          Type your API URI
-        </Text>
+      <Text
+        style={styles.apiLabel}
+        lightColor="rgba(0,0,0,0.8)"
+        darkColor="rgba(255,255,255,0.8)"
+      >
+        Type your API URI
+      </Text>
       <TextInput
         style={styles.apiInput}
         editable
         value={apiUri}
+      />
+      <Button
+        title='Submit'
+        onPress={() => dispatch(setApiUri(apiUri))}
+        // style={styles.submitButton}
       />
     </View>
   );
@@ -33,12 +42,17 @@ const styles = StyleSheet.create({
     margin: 10,
     fontSize: 17,
     lineHeight: 24,
-    textAlign: 'center',
   },
   apiInput: {
     paddingLeft: 10,
     height: 40,
     width: 250,
+    borderWidth: 1
+  },
+  submitButton: {
+    margin: 10,
+    width: 100,
+    height: 30,
     borderWidth: 1
   }
 });
