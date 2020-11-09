@@ -44,30 +44,30 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabCameraParamList>();
+const TabCameraStack = createStackNavigator<TabCameraParamList>();
 
 function TabOneNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
+    <TabCameraStack.Navigator>
+      <TabCameraStack.Screen
         name="TabCameraScreen"
         component={TabCameraScreen}
         options={{ headerTitle: 'Camera' }}
       />
-    </TabOneStack.Navigator>
+    </TabCameraStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabSettingsParamList>();
+const TabSettingsStack = createStackNavigator<TabSettingsParamList>();
 
 function TabTwoNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
+    <TabSettingsStack.Navigator>
+      <TabSettingsStack.Screen
         name="TabSettingsScreen"
         component={TabSettingsScreen}
         options={{ headerTitle: 'Settings' }}
       />
-    </TabTwoStack.Navigator>
+    </TabSettingsStack.Navigator>
   );
 }
