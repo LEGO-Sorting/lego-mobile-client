@@ -11,9 +11,9 @@ export default {
               TabCameraScreen: 'Camera',
             },
           },
-          TabTwo: {
+          TabSettings: {
             screens: {
-              TabTwoScreen: 'two',
+              TabSettingsScreen: 'Settings',
             },
           },
         },

@@ -6,8 +6,8 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabCameraScreen from '../screens/Camera/TabCameraScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabCameraParamList, TabTwoParamList } from '../types';
+import TabSettingsScreen from '../screens/Settings/TabSettingsScreen';
+import { BottomTabParamList, TabCameraParamList, TabSettingsParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -26,7 +26,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Settings"
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
@@ -44,30 +44,30 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabCameraParamList>();
+const TabCameraStack = createStackNavigator<TabCameraParamList>();
 
 function TabOneNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
+    <TabCameraStack.Navigator>
+      <TabCameraStack.Screen
         name="TabCameraScreen"
         component={TabCameraScreen}
         options={{ headerTitle: 'Camera' }}
       />
-    </TabOneStack.Navigator>
+    </TabCameraStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const TabSettingsStack = createStackNavigator<TabSettingsParamList>();
 
 function TabTwoNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Uploading history' }}
+    <TabSettingsStack.Navigator>
+      <TabSettingsStack.Screen
+        name="TabSettingsScreen"
+        component={TabSettingsScreen}
+        options={{ headerTitle: 'Settings' }}
       />
-    </TabTwoStack.Navigator>
+    </TabSettingsStack.Navigator>
   );
 }
