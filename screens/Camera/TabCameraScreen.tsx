@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
-import base64 from 'base64-js'
 
 import { useNavigation } from '@react-navigation/native';
 import { Text, View } from '../../components/Themed';
@@ -16,58 +16,26 @@ export default function CameraScreen() {
 
   const [isRecording, setIsRecording] = useState(false);
   const [cameraRef, setCameraRef] = useState(null)
-  const [base64Video, setBase64Video] = useState('')
-
-  const stringToUint8Array = (str: any) => {
-    const length = str.length
-    const array = new Uint8Array(new ArrayBuffer(length))
-    for (let i = 0; i < length; i++) array[i] = str.charCodeAt(i)
-    return array
-  }
-
-  // const fileToBase64 = async (uri: any) => {
-  //   const content = FileSystem.readAsStringAsync(uri.toString())
-  //   .then()
-  //   console.log(`Content`, content)
-  //   return base64.fromByteArray(stringToUint8Array(content))
-  // }
-
-  const fileToBase64 = async (uri: any) => {
-    let result = '';
-    try {
-        result = await FileSystem.readAsStringAsync(uri);
-        console.log('result', result)
-    } catch(e) {
-        console.log(e);
-    }
-    return base64.fromByteArray(stringToUint8Array(result));
-  }
-
-  const uploadVideo = (localUri: string) => {
-
-  }
+  const apiUri = useSelector((state: { apiUri: any; }) => state.apiUri)
 
 
   const handleRecord = async() => {
+    
     if(!isRecording){
       setIsRecording(true)
       let video = await cameraRef.recordAsync({
         quality: Camera.Constants.VideoQuality['480p'],
         mute: true
       });
-      console.log('video', video);
       const result = await FileSystem.uploadAsync(
-        'https://8f51146e9d2c.ngrok.io/api/upload/files',
+        `${apiUri}/upload/files`,
         video.uri, {
           uploadType: FileSystem.FileSystemUploadType.MULTIPART,
           fieldName: 'file',
           mimeType: 'video/mp4'
         })
-
-      console.log(result.body.imageId);
-      Axios.post('https://8f51146e9d2c.ngrok.io/api/process',{'imageName': result.body.imageId})
-
-      console.log(result)
+      const body : { imageId:string } = JSON.parse(result.body);
+      Axios.post(`${apiUri}/processing/`,{'imageName': body.imageId})
 
     } else {
       setIsRecording(false)

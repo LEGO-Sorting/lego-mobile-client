@@ -7,7 +7,7 @@ import { View, Text, Button, TextInput } from '../../components/Themed';
 import { setApiUri } from '../../redux/Settings/Settings_actions';
 
 export default function TabSettingsScreen() {
-  const [apiUri, setApiUri] = React.useState('https://1234565576.ngrok.io/api');
+  const [apiUri, setApiConnection] = React.useState('https://1234565576.ngrok.io/api');
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
@@ -22,11 +22,12 @@ export default function TabSettingsScreen() {
         style={styles.apiInput}
         editable
         value={apiUri}
+        onChangeText={text => setApiConnection(text)}
+
       />
       <Button
         title='Submit'
         onPress={() => dispatch(setApiUri(apiUri))}
-        // style={styles.submitButton}
       />
     </View>
   );
